@@ -66,23 +66,23 @@ install(FILES include/nfc.h
     DESTINATION include
 )
 
-# Optional: Create test executables
-option(BUILD_TESTS "Build test programs" OFF)
+# Optional: Create example executables
+option(BUILD_TESTS "Build example programs" OFF)
 
 if(BUILD_TESTS)
-    add_executable(test_nfc_i2c test/test_nfc_i2c.c)
+    add_executable(test_nfc_i2c example/test_nfc_i2c.c)
     target_link_libraries(test_nfc_i2c nfc)
     set_target_properties(test_nfc_i2c PROPERTIES BUILD_RPATH "$ORIGIN/../lib")
     install(TARGETS test_nfc_i2c RUNTIME DESTINATION bin)
 
     # Tests should rely on the normal driver selection mechanism:
     # enable drivers via SROBOTIS_PERIPHERALS_NFC_ENABLED_DRIVERS.
-    add_executable(test_nfc_spi test/test_nfc_spi.c)
+    add_executable(test_nfc_spi example/test_nfc_spi.c)
     target_link_libraries(test_nfc_spi nfc)
     set_target_properties(test_nfc_spi PROPERTIES BUILD_RPATH "$ORIGIN/../lib")
     install(TARGETS test_nfc_spi RUNTIME DESTINATION bin)
 
-    add_executable(test_nfc_uart test/test_nfc_uart.c)
+    add_executable(test_nfc_uart example/test_nfc_uart.c)
     target_link_libraries(test_nfc_uart nfc)
     set_target_properties(test_nfc_uart PROPERTIES BUILD_RPATH "$ORIGIN/../lib")
     install(TARGETS test_nfc_uart RUNTIME DESTINATION bin)

@@ -1,0 +1,54 @@
+## Copyright (C) 2026 SpacemiT (Hangzhou) Technology Co. Ltd.
+## SPDX-License-Identifier: Apache-2.0
+
+module: components/peripherals/nfc
+
+tests:
+  - name: nfc-api-functional
+    description: >-
+      Builds a mock NFC driver and verifies public API allocation,
+      initialization, callback, polling, and block read/write behavior without
+      real NFC hardware.
+    category: functional
+    scopes: [pr, scheduled]
+    timeout_s: 120
+    workdir: sdk
+    artifacts:
+      - output/test/pr/components__peripherals__nfc/modules/components__peripherals__nfc/logs/nfc_api_functional.log
+      - output/test/scheduled/components__peripherals__nfc/modules/components__peripherals__nfc/logs/nfc_api_functional.log
+    command: |
+      bash components/peripherals/nfc/tests/test_nfc_api_contract.sh functional
+
+  - name: nfc-api-error-paths
+    description: >-
+      Verifies NFC public API error handling for null inputs, malformed driver
+      names, missing drivers, bus type mismatches, and operations before init.
+    category: functional
+    scopes: [pr, scheduled]
+    timeout_s: 120
+    workdir: sdk
+    artifacts:
+      - output/test/pr/components__peripherals__nfc/modules/components__peripherals__nfc/logs/nfc_api_error_paths.log
+      - output/test/scheduled/components__peripherals__nfc/modules/components__peripherals__nfc/logs/nfc_api_error_paths.log
+    command: |
+      bash components/peripherals/nfc/tests/test_nfc_api_contract.sh error-paths
+
+  - name: nfc-si512-i2c-hardware-smoke
+    description: >-
+      Manually verifies the SI512 I2C NFC driver can initialize the real bus
+      and detect a nearby tag through the installed sample poll path.
+    category: functional
+    scopes: [manual]
+    timeout_s: 300
+    workdir: sdk
+    requires:
+      commands: [bash, cmake, timeout]
+      hardware:
+        - >-
+          SI512 NFC reader on NFC_I2C_DEV, default /dev/i2c-5, with an NFC tag
+          held near the antenna during the test.
+      supervision: true
+    artifacts:
+      - output/test/manual/components__peripherals__nfc/modules/components__peripherals__nfc/logs/nfc_si512_i2c_hardware_smoke.log
+    command: |
+      bash components/peripherals/nfc/tests/test_hw_si512_i2c_smoke.sh
